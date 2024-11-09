@@ -15,9 +15,7 @@ export function middleware(request: NextRequest) {
     console.log("redirecting to /auth");
     return NextResponse.redirect(new URL("/auth", request.url));
   }
-  //   if (request.nextUrl.pathname === "/auth") {
-  //     return NextResponse.next();
-  //   }
+
   if (auth) {
     return NextResponse.next();
   }
