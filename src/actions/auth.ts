@@ -1,3 +1,10 @@
+"use server";
+import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
+import { useRouter } from "next/router";
+import { NextResponse } from "next/server";
+import { use } from "react";
+
 export const signIn = async (email: string, password: string) => {
   try {
     const response = await fetch(
@@ -15,7 +22,12 @@ export const signIn = async (email: string, password: string) => {
       throw new Error(data.error);
     }
 
-    localStorage.setItem("auth-token", data.jwt);
+    const cookieStore = await cookies();
+    cookieStore.set("auth", data.jwt, {
+      path: "/",
+      secure: true,
+      sameSite: "strict",
+    });
 
     return data.jwt;
   } catch (error) {
@@ -48,11 +60,20 @@ export const signUp = async (
       throw new Error(data.error);
     }
 
-    localStorage.setItem("auth-token", data.jwt);
+    const cookieStore = await cookies();
+    cookieStore.set("auth", data.jwt, {
+      path: "/",
+      secure: true,
+      sameSite: "strict",
+    });
 
     return data.jwt;
   } catch (error) {
     console.log("Error signing up", error);
     throw error;
   }
+};
+
+export const signOut = async () => {
+  (await cookies()).delete("auth");
 };
