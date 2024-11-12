@@ -36,7 +36,7 @@ export const getAlllists = async (): Promise<List[]> => {
   try {
     const cookieStore = await cookies();
     const jwt = cookieStore.get("auth")?.value;
-    console.log("jwt", jwt);
+
     if (!jwt) {
       return [];
     }
@@ -56,7 +56,7 @@ export const getAlllists = async (): Promise<List[]> => {
     if (!response.ok) {
       throw new Error(data.error);
     }
-    console.log("data", data);
+
     return data;
   } catch (error) {
     console.error("Error fetching lists:", error);

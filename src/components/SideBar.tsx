@@ -5,6 +5,7 @@ import { getAlllists } from "@/actions/list";
 import { List } from "@/lib/apiTypes";
 import { useState } from "react";
 import { SearchLists } from "@/components/SearchList";
+import Link from "next/link";
 
 export default async function SideBar() {
   const lists = await getAlllists();
@@ -14,7 +15,9 @@ export default async function SideBar() {
       <h1 className="text-2xl font-semibold">Lists</h1>
       <SearchLists initialLists={lists} />
       {lists.map((list) => (
-        <div key={list.Id}>{list.Name}</div>
+        <Link key={list.Id} href={`/list/${list.Id}`}>
+          {list.Name}
+        </Link>
       ))}
 
       <AddListForm />
