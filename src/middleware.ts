@@ -11,18 +11,20 @@ function checkAuth(request: NextRequest) {
 
 export function middleware(request: NextRequest) {
   const auth = checkAuth(request);
-  if (!auth) {
-    console.log("redirecting to /auth");
+  if (!auth && new URL(request.url).pathname !== "/auth") {
     return NextResponse.redirect(new URL("/auth", request.url));
   }
 
   if (auth) {
+    if (new URL(request.url).pathname === "/auth") {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
     return NextResponse.next();
   }
 }
 
 export const config = {
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|auth).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
   ],
 };

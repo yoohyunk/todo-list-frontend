@@ -26,7 +26,7 @@ export const signIn = async (email: string, password: string) => {
       sameSite: "strict",
     });
 
-    return data.jwt;
+    return redirect("/");
   } catch (error) {
     console.log("Error logging in", error);
     throw error;
@@ -61,7 +61,7 @@ export const signUp = async (
       sameSite: "strict",
     });
 
-    return data.jwt;
+    return redirect("/");
   } catch (error) {
     console.log("Error signing up", error);
     throw error;
