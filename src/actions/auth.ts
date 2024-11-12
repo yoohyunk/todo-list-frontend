@@ -7,16 +7,13 @@ import { use } from "react";
 
 export const signIn = async (email: string, password: string) => {
   try {
-    const response = await fetch(
-      "https://flask-server-6y1b.onrender.com/users/login",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      }
-    );
+    const response = await fetch("http://127.0.0.1:5000/users/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
     const data = await response.json();
     if (!response.ok) {
       throw new Error(data.error);
@@ -29,7 +26,7 @@ export const signIn = async (email: string, password: string) => {
       sameSite: "strict",
     });
 
-    return data.jwt;
+    return redirect("/");
   } catch (error) {
     console.log("Error logging in", error);
     throw error;
@@ -45,16 +42,13 @@ export const signUp = async (
     throw new Error("Passwords do not match");
   }
   try {
-    const response = await fetch(
-      "https://flask-server-6y1b.onrender.com/users/signup",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      }
-    );
+    const response = await fetch("http://127.0.0.1:5000/users/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
     const data = await response.json();
     if (!response.ok) {
       throw new Error(data.error);
@@ -67,7 +61,7 @@ export const signUp = async (
       sameSite: "strict",
     });
 
-    return data.jwt;
+    return redirect("/");
   } catch (error) {
     console.log("Error signing up", error);
     throw error;
