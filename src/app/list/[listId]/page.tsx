@@ -1,52 +1,27 @@
-import { cookies } from "next/headers";
-import { Todo } from "@/lib/apiTypes";
+import { getTodosNotCompleted, updateTodo } from "@/actions/todo";
+import { AddTodoForm } from "@/components/AddTodoForm";
+import { Checkbox } from "@/components/ui/checkbox";
+import { StatusCheckBox } from "@/components/StatusCheckBox";
+import { TodoComponent } from "@/components/Todo";
 
-export const getAlltodos = async (
-  listId: string
-): Promise<{
-  Todos: Todo[];
-}> => {
-  try {
-    const cookieStore = await cookies();
-    const jwt = cookieStore.get("auth")?.value;
-    console.log("jwt", jwt);
-    if (!jwt) {
-      return { Todos: [] };
-    }
-
-    const response = await fetch(
-      // "https://flask-server-6y1b.onrender.com/lists",
-      `http://127.0.0.1:5000/lists/${listId}?status=all`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: jwt,
-        },
-      }
-    );
-    const data = await response.json();
-    if (!response.ok) {
-      return { Todos: [] };
-    }
-    console.log("data", data);
-    return data;
-  } catch (error) {
-    console.error("Error fetching lists:", error);
-    return { Todos: [] };
-  }
-};
+// updateTodo = async (
+//     listId: string,
+//     todoId: string,
+//     status: string
 
 export default async function page({ params }: { params: { listId: string } }) {
   const { listId } = await params;
-  const todos = await getAlltodos(listId);
-  console.log("todos", todos);
+  const todos = await getTodosNotCompleted(listId);
+  const todoCount = todos.Todos.length;
+
   return (
-    <div>
-      page
-      {todos.Todos.map((todo) => (
-        <div key={todo.Id}>{todo.Name}</div>
-      ))}
+    <div className="flex flex-col gap-4 p-4">
+      <div className="flex flex-row justify-between items-center">
+        <h1 className="text-3xl font-semibold">{todos["List name"]}</h1>
+        <div className="border-2 px-3 py-1 rounded-md">{todoCount}</div>
+      </div>
+      <AddTodoForm />
+      <TodoComponent listId={listId} todos={todos.Todos} />
     </div>
   );
 }

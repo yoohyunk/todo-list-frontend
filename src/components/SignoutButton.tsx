@@ -11,9 +11,9 @@ export const SignoutButton = () => {
   return (
     <button
       onClick={redirectToAuth}
-      className="border-solid border-2 p-2 w-full"
+      className="border-solid p-2 w-full text-end"
     >
-      log out
+      Sign out
     </button>
   );
 };

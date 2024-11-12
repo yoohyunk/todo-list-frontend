@@ -5,7 +5,7 @@ export type List = {
 
 export type Todo = {
   Id: string;
-  Name: string;
+  Todo: string;
   Description: string;
   IsDone: boolean;
   ListId: string;
