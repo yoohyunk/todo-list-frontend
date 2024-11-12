@@ -17,9 +17,12 @@ export const AddListForm = () => {
           console.log("Error adding list", error);
         }
       }}
+      className="flex flex-row gap-1"
     >
-      <Input type="text" id="listName" placeholder="List name" />
-      <Button type="submit">Add List</Button>
+      <Input type="text" id="listName" placeholder="List name" className="" />
+      <Button type="submit" className="basis-4">
+        +
+      </Button>
     </form>
   );
 };

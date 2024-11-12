@@ -2,6 +2,7 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { List } from "@/lib/apiTypes";
 
 export const addList = async (listName: string) => {
   try {
@@ -29,5 +30,36 @@ export const addList = async (listName: string) => {
   } catch (error) {
     console.log(error);
     throw error;
+  }
+};
+export const getAlllists = async (): Promise<List[]> => {
+  try {
+    const cookieStore = await cookies();
+    const jwt = cookieStore.get("auth")?.value;
+    console.log("jwt", jwt);
+    if (!jwt) {
+      return [];
+    }
+
+    const response = await fetch(
+      // "https://flask-server-6y1b.onrender.com/lists",
+      "http://127.0.0.1:5000/lists",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: jwt,
+        },
+      }
+    );
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.error);
+    }
+    console.log("data", data);
+    return data;
+  } catch (error) {
+    console.error("Error fetching lists:", error);
+    return [];
   }
 };
