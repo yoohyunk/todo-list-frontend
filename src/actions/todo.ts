@@ -120,7 +120,6 @@ export const getTodosNotCompleted = async (
   try {
     const cookieStore = await cookies();
     const jwt = cookieStore.get("auth")!.value;
-    console.log("listId", listId);
 
     const response = await fetch(
       // "https://flask-server-6y1b.onrender.com/lists",

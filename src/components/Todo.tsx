@@ -27,7 +27,7 @@ export const TodoComponent = ({
               <StatusCheckBox listId={listId} todoId={todo.Id} />
               <AccordionTrigger>{todo.Todo} </AccordionTrigger>
             </div>
-            <AccordionContent className="text-gray-500 text-xs">
+            <AccordionContent className="text-gray-500 text-xs ml-8">
               {todo.Description}
             </AccordionContent>
           </AccordionItem>
