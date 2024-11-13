@@ -32,7 +32,7 @@ export const SearchLists = ({ initialLists }: SearchListsProps) => {
         placeholder="Search lists"
         value={searchTerm}
         onChange={handleChange}
-        className="border-2 border-gray-300 rounded-md p-1 w-full text-center"
+        className="border-2 border-gray-300 rounded-md p-1 w-full text-center text-sm"
       />
       {searchTerm && searchResults.length > 0 ? (
         searchResults.map((list) => <div key={list.Id}>{list.Name}</div>)

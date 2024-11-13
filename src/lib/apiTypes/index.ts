@@ -1,6 +1,7 @@
 export type List = {
   Id: string;
   Name: string;
+  TodoCount: number;
 };
 
 export type Todo = {

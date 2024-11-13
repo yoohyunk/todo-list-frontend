@@ -4,6 +4,7 @@ import { addTodo } from "@/actions/todo";
 import { Button } from "./ui/button";
 import { useParams } from "next/navigation";
 import { useState } from "react";
+import { Textarea } from "@/components/ui/textarea";
 
 export const AddTodoForm = () => {
   const params = useParams();
@@ -29,7 +30,7 @@ export const AddTodoForm = () => {
       }}
       className="flex flex-col gap-1"
     >
-      <div className="flex flex-row">
+      <div className="flex flex-row gap-1">
         <Input
           type="text"
           id="todoName"
@@ -42,12 +43,7 @@ export const AddTodoForm = () => {
         </Button>
       </div>
       {istodoNameClicked && (
-        <Input
-          type="text"
-          id="todoDescription"
-          placeholder="Description"
-          className=""
-        />
+        <Textarea id="todoDescription" placeholder="Description" className="" />
       )}
     </form>
   );

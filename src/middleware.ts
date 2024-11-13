@@ -5,7 +5,6 @@ import { NextRequest } from "next/server";
 
 function checkAuth(request: NextRequest) {
   const token = request.cookies.get("auth");
-  console.log("token", token);
   return Boolean(token);
 }
 
