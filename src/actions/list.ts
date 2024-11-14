@@ -27,7 +27,6 @@ export const addList = async (listName: string) => {
       }
     );
     const data = await response.json();
-    console.log(data);
     return redirect(`/lists/${data}`);
   } catch (error) {
     console.log(error);
