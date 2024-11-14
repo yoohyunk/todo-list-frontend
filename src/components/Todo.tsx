@@ -32,7 +32,7 @@ export const TodoComponent = ({
             <div className="flex items-center gap-4">
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger>
+                  <TooltipTrigger asChild>
                     <StatusCheckBox listId={listId} todoId={todo.Id} />
                   </TooltipTrigger>
                   <TooltipContent>
