@@ -9,6 +9,12 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export const TodoComponent = ({
   listId,
@@ -24,7 +30,17 @@ export const TodoComponent = ({
         {todos.map((todo) => (
           <AccordionItem value={todo.Id} key={todo.Id}>
             <div className="flex items-center gap-4">
-              <StatusCheckBox listId={listId} todoId={todo.Id} />
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <StatusCheckBox listId={listId} todoId={todo.Id} />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Mark it as completed</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
               <AccordionTrigger>{todo.Todo} </AccordionTrigger>
             </div>
             <AccordionContent className="text-gray-500 text-xs ml-8">

@@ -9,6 +9,9 @@ interface StatusCheckBoxProps {
 
 export const StatusCheckBox = ({ listId, todoId }: StatusCheckBoxProps) => {
   return (
-    <Checkbox onClick={async () => await updateTodo(listId, todoId, true)} />
+    <Checkbox
+      onClick={async () => await updateTodo(listId, todoId, true)}
+      // asChild
+    />
   );
 };

@@ -2,6 +2,7 @@
 import { Todo } from "@/lib/apiTypes";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 export const addTodo = async (
   listId: string,
@@ -32,7 +33,7 @@ export const addTodo = async (
         }),
       }
     );
-
+    revalidatePath(`/lists/${listId}`, "page");
     return "todo created";
   } catch (error) {
     console.log(error);
@@ -67,6 +68,7 @@ export const updateTodo = async (
         }),
       }
     );
+    revalidatePath(`/lists/${listId}`, "page");
     return "status updated";
   } catch (error) {
     console.log(error);
@@ -124,6 +126,38 @@ export const getTodosNotCompleted = async (
     const response = await fetch(
       // "https://flask-server-6y1b.onrender.com/lists",
       `http://127.0.0.1:5000/lists/${listId}?status=open`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: jwt,
+        },
+      }
+    );
+    const data = await response.json();
+    if (!response.ok) {
+      return { Todos: [], "List name": "" };
+    }
+
+    return data;
+  } catch (error) {
+    console.log("Error fetching lists:", error);
+    return { Todos: [], "List name": "" };
+  }
+};
+export const getTodosCompleted = async (
+  listId: string
+): Promise<{
+  "List name": string;
+  Todos: Todo[];
+}> => {
+  try {
+    const cookieStore = await cookies();
+    const jwt = cookieStore.get("auth")!.value;
+
+    const response = await fetch(
+      // "https://flask-server-6y1b.onrender.com/lists",
+      `http://127.0.0.1:5000/lists/${listId}?status=done`,
       {
         method: "GET",
         headers: {
