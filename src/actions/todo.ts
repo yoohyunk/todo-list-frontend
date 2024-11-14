@@ -2,6 +2,7 @@
 import { Todo } from "@/lib/apiTypes";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 export const addTodo = async (
   listId: string,
@@ -32,7 +33,7 @@ export const addTodo = async (
         }),
       }
     );
-
+    revalidatePath(`/lists/${listId}`, "page");
     return "todo created";
   } catch (error) {
     console.log(error);
@@ -67,6 +68,7 @@ export const updateTodo = async (
         }),
       }
     );
+    revalidatePath(`/lists/${listId}`, "page");
     return "status updated";
   } catch (error) {
     console.log(error);

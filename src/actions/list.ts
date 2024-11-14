@@ -3,6 +3,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { List } from "@/lib/apiTypes";
+import { revalidatePath } from "next/cache";
 
 export const addList = async (listName: string) => {
   try {
@@ -25,8 +26,9 @@ export const addList = async (listName: string) => {
         body: JSON.stringify({ list_name: listName }),
       }
     );
-
-    return "list created";
+    const data = await response.json();
+    console.log(data);
+    return redirect(`/lists/${data}`);
   } catch (error) {
     console.log(error);
     throw error;
@@ -84,7 +86,7 @@ export const DeleteList = async (listId: string) => {
         },
       }
     );
-    return "list deleted";
+    return redirect("/");
   } catch (error) {
     console.log(error);
     throw error;
@@ -112,6 +114,7 @@ export const changeListName = async (listId: string, listName: string) => {
         body: JSON.stringify({ new_name: listName }),
       }
     );
+    revalidatePath(`/lists/${listId}`, "page");
     return "list name updated";
   } catch (error) {
     console.log(error);
