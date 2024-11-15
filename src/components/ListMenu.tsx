@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { EditListNameCard } from "./EditListNameCard";
+import { AddCollaborator } from "./AddCollaboratorForm";
 import { useState } from "react";
 
 interface ListMenuProps {
@@ -43,8 +44,22 @@ export const ListMenu = ({ listId }: ListMenuProps) => {
               ) : null}
             </DropdownMenu>
           </DropdownMenuItem>
-          <DropdownMenuItem>Team</DropdownMenuItem>
-          <DropdownMenuItem>Subscription</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setIsEditing(true)}>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="text-sm">
+                Add new collaborator
+              </DropdownMenuTrigger>
+
+              {isEditing ? (
+                <DropdownMenuContent onClick={(e) => e.stopPropagation()}>
+                  <AddCollaborator
+                    listId={listId}
+                    onSubmitSuccess={() => setIsEditing(false)}
+                  />
+                </DropdownMenuContent>
+              ) : null}
+            </DropdownMenu>
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

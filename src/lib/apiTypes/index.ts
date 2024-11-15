@@ -11,3 +11,7 @@ export type Todo = {
   IsDone: boolean;
   ListId: string;
 };
+
+export type Collaborator = {
+  Id: string;
+};
