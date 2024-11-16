@@ -23,9 +23,11 @@ import { LuPenLine } from "react-icons/lu";
 export const TodoComponent = ({
   listId,
   todos,
+  listName,
 }: {
   listId: string;
   todos: Todo[];
+  listName: string;
 }) => {
   const [isTodoClicked, setIsTodoClicked] = useState(false);
   const [editTodoId, setEditTodoId] = useState<string | null>(null);
@@ -42,6 +44,9 @@ export const TodoComponent = ({
                   initialName={todo.Todo}
                   initialDescription={todo.Description}
                   onSave={() => {
+                    setEditTodoId(null);
+                  }}
+                  onCancel={() => {
                     setEditTodoId(null);
                   }}
                 />
@@ -76,7 +81,12 @@ export const TodoComponent = ({
                         <LuPenLine />
                         Edit
                       </button>
-                      <DeleteTodoButton todoId={todo.Id} listId={listId} />
+                      <DeleteTodoButton
+                        todoId={todo.Id}
+                        listId={listId}
+                        todoName={todo.Todo}
+                        listName={listName}
+                      />
                     </div>
                   </AccordionContent>
                 </div>

@@ -18,11 +18,24 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
 import { useEffect, useState } from "react";
-import { SearchUsers } from "./SearchUser";
+import { AddToAdminButton } from "./AddToAdminButton";
+import { LuUsers } from "react-icons/lu";
+import { LuPlusCircle } from "react-icons/lu";
 
 interface Collaborator {
   Collaborator: string[];
+}
+
+interface Admins {
+  Admins: string[];
 }
 
 interface AddCollaboratorProps {
@@ -36,8 +49,9 @@ export const AddCollaborator = ({
 }: AddCollaboratorProps) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [collaborator, setCollaborator] = useState<Collaborator | null>(null);
-  const [admin, setAdmin] = useState<string | null>(null);
+  const [admin, setAdmin] = useState<Admins | null>(null);
   const [isClicked, setIsClicked] = useState(false);
+  const [isClickedAdmin, setIsClickedAdmin] = useState(false);
 
   useEffect(() => {
     const fetchAdmin = async () => {
@@ -66,6 +80,7 @@ export const AddCollaborator = ({
   }, [listId]);
 
   const collaboratorCount = collaborator?.Collaborator?.length || 0;
+  const adminCount = admin?.Admins?.length || 0;
 
   return (
     <form
@@ -84,26 +99,45 @@ export const AddCollaborator = ({
           console.log("Error adding list", error);
         }
       }}
+      className="p-0"
     >
       <Card className="flex flex-col">
         <CardHeader>
           <CardTitle className="text-center">Add collaborator</CardTitle>
         </CardHeader>
         <CardContent>
-          <CardDescription className="flex flex-col">
-            <div>Admin: {admin}</div>
+          <CardDescription className="flex flex-col gap-2">
             <DropdownMenu>
-              <DropdownMenuTrigger onClick={() => setIsClicked(true)}>
-                Collaborators: {collaboratorCount}
+              <DropdownMenuTrigger
+                onClick={() => setIsClicked(true)}
+                className="flex items-center w-full justify-center gap-2 text-xs"
+              >
+                <LuUsers /> Members: {collaboratorCount + adminCount}
               </DropdownMenuTrigger>
 
               {isClicked && (
                 <DropdownMenuContent>
+                  <DropdownMenuLabel>Admins</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  {adminCount > 0 ? (
+                    admin?.Admins?.map((admin) => (
+                      <DropdownMenuItem>{admin}</DropdownMenuItem>
+                    ))
+                  ) : (
+                    <DropdownMenuItem>No admins</DropdownMenuItem>
+                  )}
+                  <DropdownMenuSeparator />
                   <DropdownMenuLabel>Collaborators</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   {collaboratorCount > 0 ? (
                     collaborator?.Collaborator?.map((collaborator) => (
-                      <DropdownMenuItem>{collaborator}</DropdownMenuItem>
+                      <div className="flex ">
+                        <DropdownMenuItem>{collaborator}</DropdownMenuItem>
+                        <AddToAdminButton
+                          listId={listId}
+                          newAdminId={collaborator}
+                        />
+                      </div>
                     ))
                   ) : (
                     <DropdownMenuItem>No Collaborators</DropdownMenuItem>
@@ -111,17 +145,29 @@ export const AddCollaborator = ({
                 </DropdownMenuContent>
               )}
             </DropdownMenu>
-            <input
-              type="text"
-              id="collaborator"
-              placeholder="User Id"
-              className="text-center"
-            />
+            <div className="border-2 rounded-md flex items-center  px-1 text-xs">
+              <input
+                type="text"
+                id="collaborator"
+                placeholder="User Email"
+                className="text-center "
+              />
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger className=" flex items-center">
+                    <button type="submit">
+                      <LuPlusCircle className="" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Add collaborator</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
           </CardDescription>
         </CardContent>
-        <CardFooter className="flex flex-row justify-end">
-          <button type="submit">Add</button>
-        </CardFooter>
+        {/* <CardFooter></CardFooter> */}
       </Card>
     </form>
   );

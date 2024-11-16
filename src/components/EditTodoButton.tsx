@@ -8,12 +8,14 @@ export const EditTodoComponent = ({
   initialName,
   initialDescription,
   onSave,
+  onCancel,
 }: {
   listId: string;
   todoId: string;
   initialName: string;
   initialDescription: string;
   onSave: () => void;
+  onCancel: () => void;
 }) => {
   const [todoName, setTodoName] = useState(initialName);
   const [todoDescription, setTodoDescription] = useState(initialDescription);
@@ -48,6 +50,12 @@ export const EditTodoComponent = ({
         placeholder="Edit todo description"
       />
       <div className="flex justify-end p-2">
+        <button
+          onClick={onCancel}
+          className="border-solid p-2 text-sm mt-2 flex items-center"
+        >
+          Cancel
+        </button>
         <button
           onClick={handleSave}
           className="border-solid p-2 text-sm mt-2 flex items-center"

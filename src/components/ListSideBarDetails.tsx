@@ -41,7 +41,7 @@ export const ListSideBarDetails = async ({ listID }: { listID: string }) => {
         </div>
       </div>
       <div className="flex flex-col gap-2">
-        <h2 className="font-semibold">Completed tasks</h2>
+        <h2 className="font-semibold">Completed Tasks</h2>
         <Accordion type="single" collapsible>
           {completedTodos.map((todo) => (
             <AccordionItem value={todo.Id} key={todo.Id}>
