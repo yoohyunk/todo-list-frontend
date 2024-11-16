@@ -33,7 +33,7 @@ export const TodoComponent = ({
   const [editTodoId, setEditTodoId] = useState<string | null>(null);
   return (
     <div>
-      <Accordion type="single" collapsible className="text-gray-500">
+      <Accordion type="single" collapsible className="text-black">
         {todos.map((todo) => (
           <AccordionItem value={todo.Id} key={todo.Id} className="">
             <div className="flex items-start gap-4 w-full">

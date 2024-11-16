@@ -26,6 +26,7 @@ import { AddCollaborator } from "./AddCollaboratorForm";
 import { useState } from "react";
 import { LuPenLine } from "react-icons/lu";
 import { LuTrash } from "react-icons/lu";
+import { LuMoreVertical } from "react-icons/lu";
 
 interface ListMenuProps {
   listId: string;
@@ -37,7 +38,9 @@ export const ListMenu = ({ listId, listName }: ListMenuProps) => {
   return (
     <div>
       <DropdownMenu>
-        <DropdownMenuTrigger className="text-2xl">...</DropdownMenuTrigger>
+        <DropdownMenuTrigger className="text-2xl">
+          <LuMoreVertical />
+        </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel>Settings</DropdownMenuLabel>
           <DropdownMenuSeparator />
