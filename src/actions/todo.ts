@@ -177,3 +177,100 @@ export const getTodosCompleted = async (
     return { Todos: [], "List name": "" };
   }
 };
+
+export const editTodoName = async (
+  listId: string,
+  todoId: string,
+  todoName: string
+) => {
+  try {
+    const cookieStore = await cookies();
+    const jwt = cookieStore.get("auth")?.value;
+
+    if (!jwt) {
+      return redirect("/auth");
+    }
+
+    const response = await fetch(
+      // "https://flask-server-6y1b.onrender.com/lists",
+      `http://127.0.0.1:5000/lists/${listId}/${todoId}/name`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: jwt,
+        },
+        body: JSON.stringify({
+          new_name: todoName,
+        }),
+      }
+    );
+    revalidatePath(`/lists/${listId}`, "page");
+    return "todo updated";
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const editTodoDescription = async (
+  listId: string,
+  todoId: string,
+  todoDescription: string
+) => {
+  try {
+    const cookieStore = await cookies();
+    const jwt = cookieStore.get("auth")?.value;
+
+    if (!jwt) {
+      return redirect("/auth");
+    }
+
+    const response = await fetch(
+      // "https://flask-server-6y1b.onrender.com/lists",
+      `http://127.0.0.1:5000/lists/${listId}/${todoId}/description`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: jwt,
+        },
+        body: JSON.stringify({
+          new_description: todoDescription,
+        }),
+      }
+    );
+    revalidatePath(`/lists/${listId}`, "page");
+    return "todo updated";
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const deleteTodo = async (listId: string, todoId: string) => {
+  try {
+    const cookieStore = await cookies();
+    const jwt = cookieStore.get("auth")?.value;
+
+    if (!jwt) {
+      return redirect("/auth");
+    }
+
+    const response = await fetch(
+      // "https://flask-server-6y1b.onrender.com/lists",
+      `http://127.0.0.1:5000/lists/${listId}/${todoId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: jwt,
+        },
+      }
+    );
+    return `/lists/${listId}`;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

@@ -71,3 +71,29 @@ export const signUp = async (
 export const signOut = async () => {
   (await cookies()).delete("auth");
 };
+
+export const getUsersLists = async () => {
+  try {
+    const cookieStore = await cookies();
+    const jwt = cookieStore.get("auth")?.value;
+    if (!jwt) {
+      return redirect("/auth");
+    }
+
+    const response = await fetch("http://127.0.0.1:5000/users/users", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: jwt,
+      },
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      return [];
+    }
+    return data;
+  } catch (error) {
+    console.log("Error fetching lists:", error);
+    throw error;
+  }
+};
