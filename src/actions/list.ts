@@ -195,7 +195,11 @@ export const getCollaborators = async (
   }
 };
 
-export const getAdmin = async (listId: string): Promise<string> => {
+interface AdminsResponse {
+  Admins: string[];
+}
+
+export const getAdmin = async (listId: string): Promise<AdminsResponse> => {
   try {
     const cookieStore = await cookies();
     const jwt = cookieStore.get("auth")?.value;
@@ -217,9 +221,9 @@ export const getAdmin = async (listId: string): Promise<string> => {
     );
     const data = await response.json();
     if (!response.ok) {
-      return data.Admin;
+      return data;
     }
-    return data.Admin;
+    return data;
   } catch (error) {
     console.log(error);
     throw error;
@@ -248,6 +252,34 @@ export const addCollaborator = async (listId: string, collaborator: string) => {
       }
     );
     console.log(collaborator);
+    return redirect(`/lists/${listId}`);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const addAdmin = async (listId: string, newAdmin: string) => {
+  try {
+    const cookieStore = await cookies();
+    const jwt = cookieStore.get("auth")?.value;
+
+    if (!jwt) {
+      return redirect("/auth");
+    }
+
+    const response = await fetch(
+      // "https://flask-server-6y1b.onrender.com/lists",
+      `http://127.0.0.1:5000/lists/${listId}/admin`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: jwt,
+        },
+        body: JSON.stringify({ new_admin_id: newAdmin }),
+      }
+    );
     return redirect(`/lists/${listId}`);
   } catch (error) {
     console.log(error);

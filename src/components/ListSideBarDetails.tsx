@@ -15,6 +15,9 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
+import { LuSmile } from "react-icons/lu";
+import { LuSkull } from "react-icons/lu";
+
 export const ListSideBarDetails = async ({ listID }: { listID: string }) => {
   const { Todos: completedTodos } = await getTodosCompleted(listID);
   const { Todos: notCompletedTodos } = await getTodosNotCompleted(listID);
@@ -35,14 +38,15 @@ export const ListSideBarDetails = async ({ listID }: { listID: string }) => {
           </Tooltip>
         </TooltipProvider>
 
-        <div className="text-xs">
-          Incompleted: {notCompletedTodos.length}/ Completed:
-          {completedTodos.length}/ Total: {totalTodos}
+        <div className="text-xs  ">
+          <div className=" text-left text-gray-500">
+            {completedTodos.length} out of {totalTodos} is completed!
+          </div>
         </div>
       </div>
       <div className="flex flex-col gap-2">
-        <h2 className="font-semibold">Completed tasks</h2>
-        <Accordion type="single" collapsible>
+        <h2 className="font-semibold">Completed Tasks</h2>
+        <Accordion type="single" collapsible className="text-gray-500">
           {completedTodos.map((todo) => (
             <AccordionItem value={todo.Id} key={todo.Id}>
               <div className="flex items-center gap-2">
@@ -61,7 +65,7 @@ export const ListSideBarDetails = async ({ listID }: { listID: string }) => {
                   {todo.Todo}{" "}
                 </AccordionTrigger>
               </div>
-              <AccordionContent className="text-gray-500 text-xs">
+              <AccordionContent className="text-gray-500 text-xs ml-6">
                 {todo.Description}
               </AccordionContent>
             </AccordionItem>

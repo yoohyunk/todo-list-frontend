@@ -33,10 +33,14 @@ export default async function page({ params }: { params: { listId: string } }) {
             <h1 className="text-3xl font-semibold">{todos["List name"]}</h1>
             <div className="border-2 px-3 py-1 rounded-md">{todoCount}</div>
           </div>
-          <ListMenu listId={listId} />
+          <ListMenu listId={listId} listName={todos["List name"]} />
         </div>
         <AddTodoForm />
-        <TodoComponent listId={listId} todos={todos.Todos} />
+        <TodoComponent
+          listId={listId}
+          todos={todos.Todos}
+          listName={todos["List name"]}
+        />
       </div>
       <div className="inline-block h-[1em] sm:h-full min-h-[1em] w-full sm:w-0.5 self-stretch bg-neutral-100 dark:bg-white/10"></div>
       <div className="sm:basis-1/4">
