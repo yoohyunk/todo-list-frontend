@@ -24,7 +24,6 @@ export const request = async (
     },
   };
 
-  console.log("json", json);
   if (json) {
     requestOptions.body = JSON.stringify(json);
   }
@@ -36,7 +35,7 @@ export const request = async (
     }
     return response;
   } catch (error) {
-    console.error("Network request failed:", error);
+    console.log("Network request failed:", error);
     throw error;
   }
 };
