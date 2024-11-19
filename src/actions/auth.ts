@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { useRouter } from "next/router";
 import { NextResponse } from "next/server";
 import { use } from "react";
+import { request } from "@/utils/request";
 
 export const signIn = async (email: string, password: string) => {
   try {
@@ -74,19 +75,7 @@ export const signOut = async () => {
 
 export const getUsersLists = async () => {
   try {
-    const cookieStore = await cookies();
-    const jwt = cookieStore.get("auth")?.value;
-    if (!jwt) {
-      return redirect("/auth");
-    }
-
-    const response = await fetch("http://127.0.0.1:5000/users/users", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: jwt,
-      },
-    });
+    const response = await request("/users", "GET");
     const data = await response.json();
     if (!response.ok) {
       return [];

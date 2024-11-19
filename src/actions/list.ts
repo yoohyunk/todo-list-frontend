@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { List } from "@/lib/apiTypes";
 import { Collaborator } from "@/lib/apiTypes";
 import { revalidatePath } from "next/cache";
+import { request } from "@/utils/request";
 
 // export const addList = async (listName: string) => {
 //   try {
@@ -42,21 +43,7 @@ export const addList = async (listName: string) => {
       throw new Error("List name is required");
     }
 
-    const cookieStore = await cookies();
-    const jwt = cookieStore.get("auth")?.value;
-
-    if (!jwt) {
-      return redirect("/auth");
-    }
-
-    const response = await fetch("http://127.0.0.1:5000/lists", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: jwt,
-      },
-      body: JSON.stringify({ list_name: listName }),
-    });
+    const response = await request("/lists", "POST", { list_name: listName });
 
     if (!response.ok) {
       throw new Error(`Failed to add list: ${response.statusText}`);
@@ -72,27 +59,10 @@ export const addList = async (listName: string) => {
 
 export const getAlllists = async (): Promise<List[]> => {
   try {
-    const cookieStore = await cookies();
-    const jwt = cookieStore.get("auth")?.value;
-
-    if (!jwt) {
-      return [];
-    }
-
-    const response = await fetch(
-      // "https://flask-server-6y1b.onrender.com/lists",
-      "http://127.0.0.1:5000/lists",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: jwt,
-        },
-      }
-    );
+    const response = await request("/lists", "GET");
     const data = await response.json();
     if (!response.ok) {
-      throw new Error(data.error);
+      return [];
     }
 
     return data;
@@ -104,24 +74,8 @@ export const getAlllists = async (): Promise<List[]> => {
 
 export const DeleteList = async (listId: string) => {
   try {
-    const cookieStore = await cookies();
-    const jwt = cookieStore.get("auth")?.value;
+    const response = await request(`/lists/${listId}`, "DELETE");
 
-    if (!jwt) {
-      return redirect("/auth");
-    }
-
-    const response = await fetch(
-      // "https://flask-server-6y1b.onrender.com/lists",
-      `http://127.0.0.1:5000/lists/${listId}`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: jwt,
-        },
-      }
-    );
     return redirect("/");
   } catch (error) {
     console.log(error);
@@ -131,25 +85,9 @@ export const DeleteList = async (listId: string) => {
 
 export const changeListName = async (listId: string, listName: string) => {
   try {
-    const cookieStore = await cookies();
-    const jwt = cookieStore.get("auth")?.value;
-
-    if (!jwt) {
-      return redirect("/auth");
-    }
-
-    const response = await fetch(
-      // "https://flask-server-6y1b.onrender.com/lists",
-      `http://127.0.0.1:5000/lists/${listId}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: jwt,
-        },
-        body: JSON.stringify({ new_name: listName }),
-      }
-    );
+    const response = await request(`/lists/${listId}`, "PATCH", {
+      new_name: listName,
+    });
     revalidatePath(`/lists/${listId}`, "page");
     return "list name updated";
   } catch (error) {
@@ -166,24 +104,7 @@ export const getCollaborators = async (
   listId: string
 ): Promise<CollaboratorResponse> => {
   try {
-    const cookieStore = await cookies();
-    const jwt = cookieStore.get("auth")?.value;
-
-    if (!jwt) {
-      return redirect("/auth");
-    }
-
-    const response = await fetch(
-      // "https://flask-server-6y1b.onrender.com/lists",
-      `http://127.0.0.1:5000/lists/${listId}/collaborator`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: jwt,
-        },
-      }
-    );
+    const response = await request(`/lists/${listId}/collaborator`, "GET");
     const data = await response.json();
     if (!response.ok) {
       return { Collaborator: [] };
@@ -201,24 +122,7 @@ interface AdminsResponse {
 
 export const getAdmin = async (listId: string): Promise<AdminsResponse> => {
   try {
-    const cookieStore = await cookies();
-    const jwt = cookieStore.get("auth")?.value;
-
-    if (!jwt) {
-      return redirect("/auth");
-    }
-
-    const response = await fetch(
-      // "https://flask-server-6y1b.onrender.com/lists",
-      `http://127.0.0.1:5000/lists/${listId}/admin`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: jwt,
-        },
-      }
-    );
+    const response = await request(`/lists/${listId}/admin`, "GET");
     const data = await response.json();
     if (!response.ok) {
       return data;
@@ -232,25 +136,9 @@ export const getAdmin = async (listId: string): Promise<AdminsResponse> => {
 
 export const addCollaborator = async (listId: string, collaborator: string) => {
   try {
-    const cookieStore = await cookies();
-    const jwt = cookieStore.get("auth")?.value;
-
-    if (!jwt) {
-      return redirect("/auth");
-    }
-
-    const response = await fetch(
-      // "https://flask-server-6y1b.onrender.com/lists",
-      `http://127.0.0.1:5000/lists/${listId}/collaborator`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: jwt,
-        },
-        body: JSON.stringify({ collaborator_id: collaborator }),
-      }
-    );
+    const response = await request(`/lists/${listId}/collaborator`, "POST", {
+      collaborator_id: collaborator,
+    });
     console.log(collaborator);
     return redirect(`/lists/${listId}`);
   } catch (error) {
@@ -261,25 +149,9 @@ export const addCollaborator = async (listId: string, collaborator: string) => {
 
 export const addAdmin = async (listId: string, newAdmin: string) => {
   try {
-    const cookieStore = await cookies();
-    const jwt = cookieStore.get("auth")?.value;
-
-    if (!jwt) {
-      return redirect("/auth");
-    }
-
-    const response = await fetch(
-      // "https://flask-server-6y1b.onrender.com/lists",
-      `http://127.0.0.1:5000/lists/${listId}/admin`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: jwt,
-        },
-        body: JSON.stringify({ new_admin_id: newAdmin }),
-      }
-    );
+    const response = await request(`/lists/${listId}/admin`, "POST", {
+      new_admin_id: newAdmin,
+    });
     return redirect(`/lists/${listId}`);
   } catch (error) {
     console.log(error);

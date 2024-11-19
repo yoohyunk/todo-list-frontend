@@ -3,6 +3,7 @@ import { Todo } from "@/lib/apiTypes";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { request } from "@/utils/request";
 
 export const addTodo = async (
   listId: string,
@@ -10,29 +11,10 @@ export const addTodo = async (
   todoDescription: string
 ) => {
   try {
-    const cookieStore = await cookies();
-    const jwt = cookieStore.get("auth")?.value;
-
-    if (!jwt) {
-      return redirect("/auth");
-    }
-
-    const response = await fetch(
-      // "https://flask-server-6y1b.onrender.com/lists",
-      `http://127.0.0.1:5000/lists/${listId}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: jwt,
-        },
-        body: JSON.stringify({
-          list_id: listId,
-          todo_item: todoName,
-          description: todoDescription,
-        }),
-      }
-    );
+    const response = await request(`/lists/${listId}`, "POST", {
+      todo_item: todoName,
+      description: todoDescription,
+    });
     revalidatePath(`/lists/${listId}`, "page");
     return "todo created";
   } catch (error) {
@@ -47,27 +29,9 @@ export const updateTodo = async (
   status: boolean
 ) => {
   try {
-    const cookieStore = await cookies();
-    const jwt = cookieStore.get("auth")?.value;
-
-    if (!jwt) {
-      return redirect("/auth");
-    }
-
-    const response = await fetch(
-      // "https://flask-server-6y1b.onrender.com/lists",
-      `http://127.0.0.1:5000/lists/${listId}/${todoId}/status`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: jwt,
-        },
-        body: JSON.stringify({
-          status: status,
-        }),
-      }
-    );
+    const response = await request(`/lists/${listId}/${todoId}`, "PATCH", {
+      status: status,
+    });
     revalidatePath(`/lists/${listId}`, "page");
     return "status updated";
   } catch (error) {
@@ -92,7 +56,7 @@ export const updateTodo = async (
 
 //     const response = await fetch(
 //       // "https://flask-server-6y1b.onrender.com/lists",
-//       `http://127.0.0.1:5000/lists/${listId}?status=all`,
+//       `https://flask-server-6y1b.onrender.com/lists/${listId}?status=all`,
 //       {
 //         method: "GET",
 //         headers: {
@@ -120,20 +84,7 @@ export const getTodosNotCompleted = async (
   Todos: Todo[];
 }> => {
   try {
-    const cookieStore = await cookies();
-    const jwt = cookieStore.get("auth")!.value;
-
-    const response = await fetch(
-      // "https://flask-server-6y1b.onrender.com/lists",
-      `http://127.0.0.1:5000/lists/${listId}?status=open`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: jwt,
-        },
-      }
-    );
+    const response = await request(`/lists/${listId}?status=open`, "GET");
     const data = await response.json();
     if (!response.ok) {
       return { Todos: [], "List name": "" };
@@ -152,20 +103,7 @@ export const getTodosCompleted = async (
   Todos: Todo[];
 }> => {
   try {
-    const cookieStore = await cookies();
-    const jwt = cookieStore.get("auth")!.value;
-
-    const response = await fetch(
-      // "https://flask-server-6y1b.onrender.com/lists",
-      `http://127.0.0.1:5000/lists/${listId}?status=done`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: jwt,
-        },
-      }
-    );
+    const response = await request(`/lists/${listId}?status=completed`, "GET");
     const data = await response.json();
     if (!response.ok) {
       return { Todos: [], "List name": "" };
@@ -184,27 +122,9 @@ export const editTodoName = async (
   todoName: string
 ) => {
   try {
-    const cookieStore = await cookies();
-    const jwt = cookieStore.get("auth")?.value;
-
-    if (!jwt) {
-      return redirect("/auth");
-    }
-
-    const response = await fetch(
-      // "https://flask-server-6y1b.onrender.com/lists",
-      `http://127.0.0.1:5000/lists/${listId}/${todoId}/name`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: jwt,
-        },
-        body: JSON.stringify({
-          new_name: todoName,
-        }),
-      }
-    );
+    const response = await request(`/lists/${listId}/${todoId}/name`, "PATCH", {
+      new_name: todoName,
+    });
     revalidatePath(`/lists/${listId}`, "page");
     return "todo updated";
   } catch (error) {
@@ -219,25 +139,11 @@ export const editTodoDescription = async (
   todoDescription: string
 ) => {
   try {
-    const cookieStore = await cookies();
-    const jwt = cookieStore.get("auth")?.value;
-
-    if (!jwt) {
-      return redirect("/auth");
-    }
-
-    const response = await fetch(
-      // "https://flask-server-6y1b.onrender.com/lists",
-      `http://127.0.0.1:5000/lists/${listId}/${todoId}/description`,
+    const response = await request(
+      `/lists/${listId}/${todoId}/description`,
+      "PATCH",
       {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: jwt,
-        },
-        body: JSON.stringify({
-          new_description: todoDescription,
-        }),
+        new_description: todoDescription,
       }
     );
     revalidatePath(`/lists/${listId}`, "page");
@@ -250,24 +156,7 @@ export const editTodoDescription = async (
 
 export const deleteTodo = async (listId: string, todoId: string) => {
   try {
-    const cookieStore = await cookies();
-    const jwt = cookieStore.get("auth")?.value;
-
-    if (!jwt) {
-      return redirect("/auth");
-    }
-
-    const response = await fetch(
-      // "https://flask-server-6y1b.onrender.com/lists",
-      `http://127.0.0.1:5000/lists/${listId}/${todoId}`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: jwt,
-        },
-      }
-    );
+    const response = await request(`/lists/${listId}/${todoId}`, "DELETE");
     return `/lists/${listId}`;
   } catch (error) {
     console.log(error);

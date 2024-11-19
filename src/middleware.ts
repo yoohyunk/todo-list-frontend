@@ -10,6 +10,7 @@ function checkAuth(request: NextRequest) {
 
 export function middleware(request: NextRequest) {
   const auth = checkAuth(request);
+  console.log("auth", auth);
   if (!auth && new URL(request.url).pathname !== "/auth") {
     return NextResponse.redirect(new URL("/auth", request.url));
   }
