@@ -1,20 +1,20 @@
 "use server";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
-import { useRouter } from "next/router";
-import { NextResponse } from "next/server";
-import { use } from "react";
 import { request } from "@/utils/request";
 
 export const signIn = async (email: string, password: string) => {
   try {
-    const response = await fetch("http://127.0.0.1:5000/users/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await request(
+      "/users/login",
+      "POST",
+      {
+        email,
+        password,
       },
-      body: JSON.stringify({ email, password }),
-    });
+      true
+    );
+
     const data = await response.json();
     if (!response.ok) {
       throw new Error(data.error);
@@ -43,13 +43,13 @@ export const signUp = async (
     throw new Error("Passwords do not match");
   }
   try {
-    const response = await fetch("http://127.0.0.1:5000/users/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
+    const response = await request(
+      "/users/signup",
+      "POST",
+      { email, password },
+      true
+    );
+
     const data = await response.json();
     if (!response.ok) {
       throw new Error(data.error);

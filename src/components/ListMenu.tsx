@@ -57,7 +57,8 @@ export const ListMenu = ({ listId, listName }: ListMenuProps) => {
               <AlertDialogContent>
                 <AlertDialogHeader>
                   <AlertDialogTitle>
-                    Are you sure you want to delete the list: "{listName}"?
+                    Are you sure you want to delete the list: &quot;{listName}
+                    &quot;?
                   </AlertDialogTitle>
                   <AlertDialogDescription>
                     This action cannot be undone. Deleting this list will

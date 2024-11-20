@@ -1,26 +1,16 @@
-import { getTodosNotCompleted, updateTodo } from "@/actions/todo";
+import { getTodosNotCompleted } from "@/actions/todo";
 import { AddTodoForm } from "@/components/AddTodoForm";
-import { Checkbox } from "@/components/ui/checkbox";
-import { StatusCheckBox } from "@/components/StatusCheckBox";
-import { TodoComponent } from "@/components/Todo";
-import { Separator } from "@/components/ui/separator";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { TodoComponent } from "@/components/Todo";
+
 import { ListSideBarDetails } from "@/components/ListSideBarDetails";
 import { ListMenu } from "@/components/ListMenu";
-// updateTodo = async (
-//     listId: string,
-//     todoId: string,
-//     status: string
 
-export default async function page({ params }: { params: { listId: string } }) {
+export default async function page({
+  params,
+}: {
+  params: Promise<{ listId: string }>;
+}) {
   const { listId } = await params;
   const todos = await getTodosNotCompleted(listId);
   const todoCount = todos.Todos.length;

@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { List } from "@/lib/apiTypes";
-import { useRouter } from "next/compat/router";
+
 import Link from "next/link";
 import { LuSearch } from "react-icons/lu";
 
@@ -13,12 +13,6 @@ export const SearchLists = ({ initialLists }: SearchListsProps) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [searchResults, setSearchResults] = useState<List[]>([]);
   const [isActive, setIsActive] = useState<boolean>(true);
-  const router = useRouter();
-  const handleListClick = (listId: string) => {
-    if (router && router.isReady) {
-      router.push(`/lists/${listId}`);
-    }
-  };
 
   useEffect(() => {
     if (searchTerm === "") {

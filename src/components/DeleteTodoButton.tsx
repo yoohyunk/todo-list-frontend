@@ -38,11 +38,11 @@ export const DeleteTodoButton = ({
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              Are you sure you want to delete the task: "{todoName}"?
+              Are you sure you want to delete the task: &quot;{todoName}&quot;?
             </AlertDialogTitle>
             <AlertDialogDescription>
               This action cannot be undone. Deleting this task will permanently
-              remove it from the list: "{listName}".
+              remove it from the list: &quot;{listName}&quot;.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

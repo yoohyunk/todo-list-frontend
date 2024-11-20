@@ -12,7 +12,7 @@ import {
 import { signIn, signUp } from "@/actions/auth";
 import React, { useState } from "react";
 
-export default function page() {
+export default function Page() {
   const [error, setError] = useState<string | null>(null);
   const [currentForm, setCurrentForm] = useState<"login" | "signup">("login");
   const toggleForm = () => {
@@ -103,7 +103,7 @@ export default function page() {
             )}
             {currentForm === "login" ? (
               <CardDescription className="text-xs">
-                Don't have account?{" "}
+                Don&apos;t have account?{" "}
                 <span onClick={toggleForm} className="text-blue-500 underline">
                   Sign up
                 </span>
