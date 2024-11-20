@@ -13,7 +13,6 @@ export const request = async (
   if (isPublicService === false) {
     const cookieStore = await cookies();
     jwt = cookieStore.get("auth")?.value || "";
-
     if (!jwt) {
       redirect("/auth");
     }
