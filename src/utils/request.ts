@@ -4,23 +4,26 @@ import { redirect } from "next/navigation";
 export const request = async (
   path: string,
   method: "GET" | "POST" | "PATCH" | "DELETE" = "GET",
-  json: Object | undefined = undefined
+  json: object | undefined = undefined,
+  isPublicService = false
 ) => {
-  const urlDev = "http://127.0.0.1:5000";
+  const urlDev = process.env.NEXT_PUBLIC_API_URL;
 
-  const cookieStore = await cookies();
-  const jwt = cookieStore.get("auth")?.value;
+  let jwt = "";
+  if (isPublicService === false) {
+    const cookieStore = await cookies();
+    jwt = cookieStore.get("auth")?.value || "";
 
-  if (!jwt) {
-    redirect("/auth");
-    throw new Error("Unauthorized");
+    if (!jwt) {
+      redirect("/auth");
+      throw new Error("Unauthorized");
+    }
   }
-
   const requestOptions: RequestInit = {
     method: method,
     headers: {
       "Content-Type": "application/json",
-      Authorization: jwt,
+      ...(jwt && { Authorization: jwt }),
     },
   };
 
