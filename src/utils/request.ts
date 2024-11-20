@@ -16,7 +16,6 @@ export const request = async (
 
     if (!jwt) {
       redirect("/auth");
-      throw new Error("Unauthorized");
     }
   }
   const requestOptions: RequestInit = {

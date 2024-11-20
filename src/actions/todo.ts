@@ -1,7 +1,5 @@
 "use server";
 import { Todo } from "@/lib/apiTypes";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { request } from "@/utils/request";
 
@@ -11,7 +9,7 @@ export const addTodo = async (
   todoDescription: string
 ) => {
   try {
-    const response = await request(`/lists/${listId}`, "POST", {
+    await request(`/lists/${listId}`, "POST", {
       todo_item: todoName,
       description: todoDescription,
     });
@@ -29,7 +27,7 @@ export const updateTodo = async (
   status: boolean
 ) => {
   try {
-    const response = await request(`/lists/${listId}/${todoId}`, "PATCH", {
+    await request(`/lists/${listId}/${todoId}/status`, "PATCH", {
       status: status,
     });
     revalidatePath(`/lists/${listId}`, "page");
@@ -103,7 +101,7 @@ export const getTodosCompleted = async (
   Todos: Todo[];
 }> => {
   try {
-    const response = await request(`/lists/${listId}?status=completed`, "GET");
+    const response = await request(`/lists/${listId}?status=done`, "GET");
     const data = await response.json();
     if (!response.ok) {
       return { Todos: [], "List name": "" };
@@ -122,7 +120,7 @@ export const editTodoName = async (
   todoName: string
 ) => {
   try {
-    const response = await request(`/lists/${listId}/${todoId}/name`, "PATCH", {
+    await request(`/lists/${listId}/${todoId}/name`, "PATCH", {
       new_name: todoName,
     });
     revalidatePath(`/lists/${listId}`, "page");
@@ -139,13 +137,9 @@ export const editTodoDescription = async (
   todoDescription: string
 ) => {
   try {
-    const response = await request(
-      `/lists/${listId}/${todoId}/description`,
-      "PATCH",
-      {
-        new_description: todoDescription,
-      }
-    );
+    await request(`/lists/${listId}/${todoId}/description`, "PATCH", {
+      new_description: todoDescription,
+    });
     revalidatePath(`/lists/${listId}`, "page");
     return "todo updated";
   } catch (error) {
@@ -156,7 +150,7 @@ export const editTodoDescription = async (
 
 export const deleteTodo = async (listId: string, todoId: string) => {
   try {
-    const response = await request(`/lists/${listId}/${todoId}`, "DELETE");
+    await request(`/lists/${listId}/${todoId}`, "DELETE");
     return `/lists/${listId}`;
   } catch (error) {
     console.log(error);

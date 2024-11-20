@@ -15,9 +15,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import { LuSmile } from "react-icons/lu";
-import { LuSkull } from "react-icons/lu";
-
 export const ListSideBarDetails = async ({ listID }: { listID: string }) => {
   const { Todos: completedTodos } = await getTodosCompleted(listID);
   const { Todos: notCompletedTodos } = await getTodosNotCompleted(listID);

@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/card";
 
 import { changeListName } from "@/actions/list";
-import { useState } from "react";
 
 interface EditListNameCardProps {
   listId: string;
@@ -19,8 +18,6 @@ export const EditListNameCard = ({
   listId,
   onSubmitSuccess,
 }: EditListNameCardProps) => {
-  const [isSubmitted, setIsSubmitted] = useState(false);
-
   return (
     <form
       onSubmit={async (e) => {
@@ -31,7 +28,7 @@ export const EditListNameCard = ({
             listId,
             (target.elements.namedItem("todoName") as HTMLInputElement).value
           );
-          setIsSubmitted(true);
+
           onSubmitSuccess();
         } catch (error) {
           console.log("Error adding list", error);

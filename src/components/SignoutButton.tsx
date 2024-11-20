@@ -1,6 +1,6 @@
 "use client";
 import { signOut } from "@/actions/auth";
-import { sign } from "crypto";
+
 import { redirect } from "next/navigation";
 import { LuLogOut } from "react-icons/lu";
 

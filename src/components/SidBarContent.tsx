@@ -7,8 +7,6 @@ import { SignoutButton } from "./SignoutButton";
 import { useState } from "react";
 import { LuList } from "react-icons/lu";
 import { LuPanelLeftClose } from "react-icons/lu";
-import { LuPanelLeftOpen } from "react-icons/lu";
-import { list } from "postcss";
 
 interface SidebarContentProps {
   lists: List[];

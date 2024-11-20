@@ -1,9 +1,7 @@
 "use server";
 
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { List } from "@/lib/apiTypes";
-import { Collaborator } from "@/lib/apiTypes";
 import { revalidatePath } from "next/cache";
 import { request } from "@/utils/request";
 
@@ -74,7 +72,7 @@ export const getAlllists = async (): Promise<List[]> => {
 
 export const DeleteList = async (listId: string) => {
   try {
-    const response = await request(`/lists/${listId}`, "DELETE");
+    await request(`/lists/${listId}`, "DELETE");
 
     return redirect("/");
   } catch (error) {
@@ -85,7 +83,7 @@ export const DeleteList = async (listId: string) => {
 
 export const changeListName = async (listId: string, listName: string) => {
   try {
-    const response = await request(`/lists/${listId}`, "PATCH", {
+    await request(`/lists/${listId}`, "PATCH", {
       new_name: listName,
     });
     revalidatePath(`/lists/${listId}`, "page");
@@ -136,7 +134,7 @@ export const getAdmin = async (listId: string): Promise<AdminsResponse> => {
 
 export const addCollaborator = async (listId: string, collaborator: string) => {
   try {
-    const response = await request(`/lists/${listId}/collaborator`, "POST", {
+    await request(`/lists/${listId}/collaborator`, "POST", {
       collaborator_id: collaborator,
     });
     console.log(collaborator);
@@ -149,7 +147,7 @@ export const addCollaborator = async (listId: string, collaborator: string) => {
 
 export const addAdmin = async (listId: string, newAdmin: string) => {
   try {
-    const response = await request(`/lists/${listId}/admin`, "POST", {
+    await request(`/lists/${listId}/admin`, "POST", {
       new_admin_id: newAdmin,
     });
     return redirect(`/lists/${listId}`);

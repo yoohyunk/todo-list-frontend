@@ -4,7 +4,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -47,11 +46,9 @@ export const AddCollaborator = ({
   listId,
   onSubmitSuccess,
 }: AddCollaboratorProps) => {
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const [collaborator, setCollaborator] = useState<Collaborator | null>(null);
   const [admin, setAdmin] = useState<Admins | null>(null);
   const [isClicked, setIsClicked] = useState(false);
-  const [isClickedAdmin, setIsClickedAdmin] = useState(false);
 
   useEffect(() => {
     const fetchAdmin = async () => {
@@ -93,7 +90,7 @@ export const AddCollaborator = ({
             (target.elements.namedItem("collaborator") as HTMLInputElement)
               .value
           );
-          setIsSubmitted(true);
+
           onSubmitSuccess();
         } catch (error) {
           console.log("Error adding list", error);
@@ -121,7 +118,7 @@ export const AddCollaborator = ({
                   <DropdownMenuSeparator />
                   {adminCount > 0 ? (
                     admin?.Admins?.map((admin) => (
-                      <DropdownMenuItem>{admin}</DropdownMenuItem>
+                      <DropdownMenuItem key={admin}>{admin}</DropdownMenuItem>
                     ))
                   ) : (
                     <DropdownMenuItem>No admins</DropdownMenuItem>
@@ -131,7 +128,7 @@ export const AddCollaborator = ({
                   <DropdownMenuSeparator />
                   {collaboratorCount > 0 ? (
                     collaborator?.Collaborator?.map((collaborator) => (
-                      <div className="flex ">
+                      <div className="flex " key={collaborator}>
                         <DropdownMenuItem>{collaborator}</DropdownMenuItem>
                         <AddToAdminButton
                           listId={listId}

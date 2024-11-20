@@ -1,5 +1,5 @@
 "use client";
-import { getTodosNotCompleted } from "@/actions/todo";
+
 import { useState } from "react";
 import { StatusCheckBox } from "./StatusCheckBox";
 import { Todo } from "@/lib/apiTypes";
@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/tooltip";
 import { DeleteTodoButton } from "./DeleteTodoButton";
 import { EditTodoComponent } from "./EditTodoButton";
-import { LuFileEdit } from "react-icons/lu";
+
 import { LuPenLine } from "react-icons/lu";
 
 export const TodoComponent = ({
@@ -29,7 +29,6 @@ export const TodoComponent = ({
   todos: Todo[];
   listName: string;
 }) => {
-  const [isTodoClicked, setIsTodoClicked] = useState(false);
   const [editTodoId, setEditTodoId] = useState<string | null>(null);
   return (
     <div>
