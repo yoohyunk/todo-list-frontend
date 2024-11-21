@@ -10,6 +10,8 @@ export type Todo = {
   Description: string;
   IsDone: boolean;
   ListId: string;
+  StartDate: string | null;
+  DueDate: string | null;
 };
 
 export type Collaborator = {

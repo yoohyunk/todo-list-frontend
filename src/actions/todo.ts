@@ -6,12 +6,16 @@ import { request } from "@/utils/request";
 export const addTodo = async (
   listId: string,
   todoName: string,
-  todoDescription: string
+  todoDescription: string,
+  todoStartDate: Date | undefined,
+  todoDueDate: Date | undefined
 ) => {
   try {
     await request(`/lists/${listId}`, "POST", {
       todo_item: todoName,
       description: todoDescription,
+      start_date: todoStartDate?.toISOString(),
+      due_date: todoDueDate?.toISOString(),
     });
     revalidatePath(`/lists/${listId}`, "page");
     return "todo created";
