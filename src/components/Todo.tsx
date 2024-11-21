@@ -30,6 +30,15 @@ export const TodoComponent = ({
   listName: string;
 }) => {
   const [editTodoId, setEditTodoId] = useState<string | null>(null);
+  const formatDate = (isoString: string | null): string => {
+    if (!isoString) return "No due date";
+    const date = new Date(isoString);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
   return (
     <div>
       <Accordion type="single" collapsible className="text-black">
@@ -72,6 +81,7 @@ export const TodoComponent = ({
                     className="text-gray-500 text-xs flex flex-col w-full"
                   >
                     <div className="ml-8">{todo.Description}</div>
+                    <div>Due Date: {formatDate(todo.DueDate)}</div>
                     <div className="flex gap-1 items-center justify-end w-full ">
                       <button
                         onClick={() => setEditTodoId(todo.Id)}
