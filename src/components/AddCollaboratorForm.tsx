@@ -24,10 +24,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { AddToAdminButton } from "./AddToAdminButton";
+import { RemoveCollaboratorButton } from "./RemoveCollaborator";
 import { LuUsers } from "react-icons/lu";
 import { LuPlusCircle } from "react-icons/lu";
+import { checkPermission } from "@/actions/list";
 
 interface Collaborator {
   Collaborator: string[];
@@ -49,6 +51,7 @@ export const AddCollaborator = ({
   const [collaborator, setCollaborator] = useState<Collaborator | null>(null);
   const [admin, setAdmin] = useState<Admins | null>(null);
   const [isClicked, setIsClicked] = useState(false);
+  const [permission, setPermission] = useState(false);
 
   useEffect(() => {
     const fetchAdmin = async () => {
@@ -61,6 +64,19 @@ export const AddCollaborator = ({
     };
 
     fetchAdmin();
+  }, [listId]);
+
+  useEffect(() => {
+    const Permission = async () => {
+      try {
+        const data = await checkPermission(listId);
+        setPermission(data);
+      } catch (error) {
+        console.error("Failed to fetch permission:", error);
+      }
+    };
+
+    Permission();
   }, [listId]);
 
   useEffect(() => {
@@ -130,10 +146,18 @@ export const AddCollaborator = ({
                     collaborator?.Collaborator?.map((collaborator) => (
                       <div className="flex " key={collaborator}>
                         <DropdownMenuItem>{collaborator}</DropdownMenuItem>
-                        <AddToAdminButton
-                          listId={listId}
-                          newAdminId={collaborator}
-                        />
+                        {permission && (
+                          <div>
+                            <AddToAdminButton
+                              listId={listId}
+                              newAdminId={collaborator}
+                            />{" "}
+                            <RemoveCollaboratorButton
+                              listId={listId}
+                              collaborator={collaborator}
+                            />
+                          </div>
+                        )}
                       </div>
                     ))
                   ) : (
