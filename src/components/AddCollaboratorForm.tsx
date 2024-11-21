@@ -79,16 +79,16 @@ export const AddCollaborator = ({
     Permission();
   }, [listId]);
 
-  useEffect(() => {
-    const fetchCollaborators = async () => {
-      try {
-        const data = await getCollaborators(listId);
-        setCollaborator(data);
-      } catch (error) {
-        console.error("Failed to fetch collaborators:", error);
-      }
-    };
+  const fetchCollaborators = async () => {
+    try {
+      const data = await getCollaborators(listId);
+      setCollaborator(data);
+    } catch (error) {
+      console.error("Failed to fetch collaborators:", error);
+    }
+  };
 
+  useEffect(() => {
     fetchCollaborators();
   }, [listId]);
 
@@ -106,6 +106,7 @@ export const AddCollaborator = ({
             (target.elements.namedItem("collaborator") as HTMLInputElement)
               .value
           );
+          await fetchCollaborators();
 
           onSubmitSuccess();
         } catch (error) {
@@ -155,6 +156,7 @@ export const AddCollaborator = ({
                             <RemoveCollaboratorButton
                               listId={listId}
                               collaborator={collaborator}
+                              onRemoveSuccess={fetchCollaborators}
                             />
                           </div>
                         )}

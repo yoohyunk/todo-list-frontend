@@ -153,7 +153,8 @@ export const removeCollaborator = async (
     await request(`/lists/${listId}/collaborator`, "DELETE", {
       collaborator_id: collaborator,
     });
-    return redirect(`/lists/${listId}`);
+
+    revalidatePath(`/lists/${listId}`);
   } catch (error) {
     console.log(error);
     throw error;

@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { removeCollaborator } from "../actions/list";
 
 import {
@@ -6,18 +7,25 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useRouter } from "next/navigation";
 
 export const RemoveCollaboratorButton = ({
   listId,
   collaborator,
+  onRemoveSuccess,
 }: {
   listId: string;
   collaborator: string;
+  onRemoveSuccess: () => void;
 }) => {
-  const deleteCollaborator = () => {
-    removeCollaborator(listId, collaborator);
+  const deleteCollaborator = async () => {
+    try {
+      await removeCollaborator(listId, collaborator);
+      onRemoveSuccess(); // Trigger the callback to refresh collaborators
+    } catch (error) {
+      console.log("Failed to remove collaborator:", error);
+    }
   };
-
   return (
     <TooltipProvider>
       <Tooltip>
