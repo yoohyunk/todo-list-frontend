@@ -81,6 +81,7 @@ export const TodoComponent = ({
                     className="text-gray-500 text-xs flex flex-col w-full"
                   >
                     <div className="ml-8">{todo.Description}</div>
+                    <div>Start Date: {formatDate(todo.StartDate)}</div>
                     <div>Due Date: {formatDate(todo.DueDate)}</div>
                     <div className="flex gap-1 items-center justify-end w-full ">
                       <button
