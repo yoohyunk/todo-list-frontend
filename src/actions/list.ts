@@ -187,3 +187,17 @@ export const checkPermission = async (listId: string) => {
     throw error;
   }
 };
+
+export const getAllMembers = async (listId: string) => {
+  try {
+    const response = await request(`/lists/${listId}/members`, "GET");
+    const data = await response.json();
+    if (!response.ok) {
+      return [];
+    }
+    return data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

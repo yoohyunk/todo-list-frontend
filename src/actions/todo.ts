@@ -2,16 +2,19 @@
 import { Todo } from "@/lib/apiTypes";
 import { revalidatePath } from "next/cache";
 import { request } from "@/utils/request";
+import exp from "constants";
 
 export const addTodo = async (
   listId: string,
   todoName: string,
-  todoDescription: string
+  todoDescription: string,
+  email: string[] = []
 ) => {
   try {
     await request(`/lists/${listId}`, "POST", {
       todo_item: todoName,
       description: todoDescription,
+      collaborators: email,
     });
     revalidatePath(`/lists/${listId}`, "page");
     return "todo created";
@@ -152,6 +155,62 @@ export const deleteTodo = async (listId: string, todoId: string) => {
   try {
     await request(`/lists/${listId}/${todoId}`, "DELETE");
     return `/lists/${listId}`;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const addCollaborator = async (
+  listId: string,
+  todoId: string,
+  email: string[]
+) => {
+  try {
+    await request(`/lists/${listId}/${todoId}/collaborators`, "POST", {
+      collaborators: email,
+    });
+    revalidatePath(`/lists/${listId}`, "page");
+    return "collaborator added";
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const removeCollaborator = async (
+  listId: string,
+  todoId: string,
+  email: string
+) => {
+  try {
+    await request(`/lists/${listId}/${todoId}/deletecollaborators`, "POST", {
+      collaborators: email,
+    });
+    revalidatePath(`/lists/${listId}`, "page");
+    return "collaborator removed";
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const getCollaborators = async (
+  listId: string,
+  todoId: string
+): Promise<{
+  Collaborator: string[];
+}> => {
+  try {
+    const response = await request(
+      `/lists/${listId}/${todoId}/collaborators`,
+      "GET"
+    );
+    const data = await response.json();
+    if (!response.ok) {
+      return { Collaborator: [] };
+    }
+    return data.Collaborator;
   } catch (error) {
     console.log(error);
     throw error;
