@@ -20,6 +20,8 @@ import { EditTodoComponent } from "./EditTodoButton";
 
 import { LuPenLine } from "react-icons/lu";
 
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+
 export const TodoComponent = ({
   listId,
   todos,
@@ -40,6 +42,8 @@ export const TodoComponent = ({
                 <EditTodoComponent
                   listId={listId}
                   todoId={todo.Id}
+                  todoCollaborator={todo.Collaborators}
+                  todoOwner={todo.Owner}
                   initialName={todo.Todo}
                   initialDescription={todo.Description}
                   onSave={() => {
@@ -51,7 +55,7 @@ export const TodoComponent = ({
                 />
               ) : (
                 <div className=" w-full">
-                  <AccordionTrigger className="flex ">
+                  <AccordionTrigger className="w-full flex justify-between">
                     <div className="flex gap-4">
                       <TooltipProvider>
                         <Tooltip>
@@ -65,13 +69,37 @@ export const TodoComponent = ({
                       </TooltipProvider>
                       {todo.Todo}
                     </div>
+                    <div className="flex gap-2 ml-auto">
+                      <Avatar className="w-8 h-8">
+                        <AvatarFallback className="border-2">
+                          {todo.Owner.charAt(0).toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex -space-x-4">
+                        {todo.Collaborators?.map((collaborator, index) => (
+                          <Avatar
+                            key={index}
+                            className="relative z-[1] border-2 border-white w-7 h-7"
+                            style={{
+                              zIndex: todo.Collaborators.length - index,
+                            }}
+                          >
+                            <AvatarFallback className="border-2">
+                              {collaborator.charAt(0).toUpperCase()}
+                            </AvatarFallback>
+                          </Avatar>
+                        ))}
+                      </div>
+                    </div>
                   </AccordionTrigger>
 
                   <AccordionContent
+                    key={todo.Id}
                     asChild
                     className="text-gray-500 text-xs flex flex-col w-full"
                   >
                     <div className="ml-8">{todo.Description}</div>
+
                     <div className="flex gap-1 items-center justify-end w-full ">
                       <button
                         onClick={() => setEditTodoId(todo.Id)}

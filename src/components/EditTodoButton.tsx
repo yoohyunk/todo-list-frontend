@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { editTodoName, editTodoDescription } from "@/actions/todo";
 import { LuCheck } from "react-icons/lu";
+import { AddTodoCollaborator } from "./AddTodoCollaborator";
 
 export const EditTodoComponent = ({
   listId,
   todoId,
+  todoCollaborator,
+  todoOwner,
   initialName,
   initialDescription,
   onSave,
@@ -12,6 +15,8 @@ export const EditTodoComponent = ({
 }: {
   listId: string;
   todoId: string;
+  todoCollaborator: string[];
+  todoOwner: string;
   initialName: string;
   initialDescription: string;
   onSave: () => void;
@@ -20,6 +25,11 @@ export const EditTodoComponent = ({
   const [todoName, setTodoName] = useState(initialName);
   const [todoDescription, setTodoDescription] = useState(initialDescription);
   const [isLoading, setIsLoading] = useState(false);
+  const [collaboratorsUpdated, setCollaboratorsUpdated] = useState(false);
+
+  const handleCollaboratorsUpdate = () => {
+    setCollaboratorsUpdated(true);
+  };
 
   const handleSave = async () => {
     try {
@@ -48,6 +58,16 @@ export const EditTodoComponent = ({
         onChange={(e) => setTodoDescription(e.target.value)}
         className="rounded-md border px-2 py-1 text-sm"
         placeholder="Edit todo description"
+      />
+      {collaboratorsUpdated && (
+        <p className="text-sm text-green-500">Collaborators updated</p>
+      )}
+      <AddTodoCollaborator
+        listId={listId}
+        todoId={todoId}
+        collaborators={todoCollaborator}
+        owner={todoOwner}
+        onSubmitSuccess={handleCollaboratorsUpdate}
       />
       <div className="flex justify-end p-2">
         <button

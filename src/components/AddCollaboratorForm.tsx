@@ -24,10 +24,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AddToAdminButton } from "./AddToAdminButton";
+import { RemoveCollaboratorButton } from "./RemoveCollaborator";
 import { LuUsers } from "react-icons/lu";
-import { LuPlusCircle } from "react-icons/lu";
+import { LuCirclePlus } from "react-icons/lu";
+import { checkPermission } from "@/actions/list";
 
 interface Collaborator {
   Collaborator: string[];
@@ -49,6 +51,7 @@ export const AddCollaborator = ({
   const [collaborator, setCollaborator] = useState<Collaborator | null>(null);
   const [admin, setAdmin] = useState<Admins | null>(null);
   const [isClicked, setIsClicked] = useState(false);
+  const [permission, setPermission] = useState(false);
 
   useEffect(() => {
     const fetchAdmin = async () => {
@@ -64,17 +67,30 @@ export const AddCollaborator = ({
   }, [listId]);
 
   useEffect(() => {
-    const fetchCollaborators = async () => {
+    const Permission = async () => {
       try {
-        const data = await getCollaborators(listId);
-        setCollaborator(data);
+        const data = await checkPermission(listId);
+        setPermission(data);
       } catch (error) {
-        console.error("Failed to fetch collaborators:", error);
+        console.error("Failed to fetch permission:", error);
       }
     };
 
-    fetchCollaborators();
+    Permission();
   }, [listId]);
+
+  const fetchCollaborators = useCallback(async () => {
+    try {
+      const data = await getCollaborators(listId);
+      setCollaborator(data);
+    } catch (error) {
+      console.error("Failed to fetch collaborators:", error);
+    }
+  }, [listId]);
+
+  useEffect(() => {
+    fetchCollaborators();
+  }, [fetchCollaborators]);
 
   const collaboratorCount = collaborator?.Collaborator?.length || 0;
   const adminCount = admin?.Admins?.length || 0;
@@ -90,6 +106,7 @@ export const AddCollaborator = ({
             (target.elements.namedItem("collaborator") as HTMLInputElement)
               .value
           );
+          await fetchCollaborators();
 
           onSubmitSuccess();
         } catch (error) {
@@ -130,10 +147,19 @@ export const AddCollaborator = ({
                     collaborator?.Collaborator?.map((collaborator) => (
                       <div className="flex " key={collaborator}>
                         <DropdownMenuItem>{collaborator}</DropdownMenuItem>
-                        <AddToAdminButton
-                          listId={listId}
-                          newAdminId={collaborator}
-                        />
+                        {permission && (
+                          <div>
+                            <AddToAdminButton
+                              listId={listId}
+                              newAdminId={collaborator}
+                            />{" "}
+                            <RemoveCollaboratorButton
+                              listId={listId}
+                              collaborator={collaborator}
+                              onRemoveSuccess={fetchCollaborators}
+                            />
+                          </div>
+                        )}
                       </div>
                     ))
                   ) : (
@@ -153,7 +179,7 @@ export const AddCollaborator = ({
                 <Tooltip>
                   <TooltipTrigger className=" flex items-center">
                     <button type="submit">
-                      <LuPlusCircle className="" />
+                      <LuCirclePlus className="" />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent>

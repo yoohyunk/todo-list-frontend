@@ -145,12 +145,57 @@ export const addCollaborator = async (listId: string, collaborator: string) => {
   }
 };
 
+export const removeCollaborator = async (
+  listId: string,
+  collaborator: string
+) => {
+  try {
+    await request(`/lists/${listId}/collaborator`, "DELETE", {
+      collaborator_id: collaborator,
+    });
+
+    revalidatePath(`/lists/${listId}`);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export const addAdmin = async (listId: string, newAdmin: string) => {
   try {
     await request(`/lists/${listId}/admin`, "POST", {
       new_admin_id: newAdmin,
     });
     return redirect(`/lists/${listId}`);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const checkPermission = async (listId: string) => {
+  try {
+    const response = await request(`/lists/${listId}/permission`, "GET");
+    const data = await response.json();
+    if (!response.ok) {
+      return false;
+    }
+    console.log(data);
+    return data.is_admin;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const getAllMembers = async (listId: string) => {
+  try {
+    const response = await request(`/lists/${listId}/members`, "GET");
+    const data = await response.json();
+    if (!response.ok) {
+      return [];
+    }
+    return data;
   } catch (error) {
     console.log(error);
     throw error;

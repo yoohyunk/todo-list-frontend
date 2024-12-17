@@ -10,6 +10,8 @@ export type Todo = {
   Description: string;
   IsDone: boolean;
   ListId: string;
+  Collaborators: string[];
+  Owner: string;
 };
 
 export type Collaborator = {
