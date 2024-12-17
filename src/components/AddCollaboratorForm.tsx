@@ -28,7 +28,7 @@ import { useCallback, useEffect, useState } from "react";
 import { AddToAdminButton } from "./AddToAdminButton";
 import { RemoveCollaboratorButton } from "./RemoveCollaborator";
 import { LuUsers } from "react-icons/lu";
-import { LuPlusCircle } from "react-icons/lu";
+import { LuCirclePlus } from "react-icons/lu";
 import { checkPermission } from "@/actions/list";
 
 interface Collaborator {
@@ -179,7 +179,7 @@ export const AddCollaborator = ({
                 <Tooltip>
                   <TooltipTrigger className=" flex items-center">
                     <button type="submit">
-                      <LuPlusCircle className="" />
+                      <LuCirclePlus className="" />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent>
