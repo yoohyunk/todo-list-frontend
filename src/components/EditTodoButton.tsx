@@ -59,6 +59,9 @@ export const EditTodoComponent = ({
         className="rounded-md border px-2 py-1 text-sm"
         placeholder="Edit todo description"
       />
+      {collaboratorsUpdated && (
+        <p className="text-sm text-green-500">Collaborators updated</p>
+      )}
       <AddTodoCollaborator
         listId={listId}
         todoId={todoId}

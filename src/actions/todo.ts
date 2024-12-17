@@ -2,7 +2,6 @@
 import { Todo } from "@/lib/apiTypes";
 import { revalidatePath } from "next/cache";
 import { request } from "@/utils/request";
-import exp from "constants";
 
 export const addTodo = async (
   listId: string,

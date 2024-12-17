@@ -1,4 +1,3 @@
-import { revalidatePath } from "next/cache";
 import { removeCollaborator } from "../actions/list";
 
 import {
@@ -7,7 +6,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useRouter } from "next/navigation";
 
 export const RemoveCollaboratorButton = ({
   listId,

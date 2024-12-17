@@ -24,7 +24,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import { use, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AddToAdminButton } from "./AddToAdminButton";
 import { RemoveCollaboratorButton } from "./RemoveCollaborator";
 import { LuUsers } from "react-icons/lu";
@@ -79,18 +79,18 @@ export const AddCollaborator = ({
     Permission();
   }, [listId]);
 
-  const fetchCollaborators = async () => {
+  const fetchCollaborators = useCallback(async () => {
     try {
       const data = await getCollaborators(listId);
       setCollaborator(data);
     } catch (error) {
       console.error("Failed to fetch collaborators:", error);
     }
-  };
+  }, [listId]);
 
   useEffect(() => {
     fetchCollaborators();
-  }, [listId]);
+  }, [fetchCollaborators]);
 
   const collaboratorCount = collaborator?.Collaborator?.length || 0;
   const adminCount = admin?.Admins?.length || 0;

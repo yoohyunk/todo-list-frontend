@@ -44,7 +44,7 @@ export const AddTodoCollaborator = ({
     if (triggerRef.current) {
       setPopoverWidth(triggerRef.current.offsetWidth);
     }
-  }, [triggerRef.current, open]);
+  }, [open]);
 
   useEffect(() => {
     const fetchMembers = async () => {
@@ -103,8 +103,6 @@ export const AddTodoCollaborator = ({
                   <CommandEmpty>No member found.</CommandEmpty>
                   <CommandGroup>
                     {members.map((member) => {
-                      const isCollaborator =
-                        collaborators.includes(member) || member === owner;
                       return (
                         <CommandItem
                           key={member}
