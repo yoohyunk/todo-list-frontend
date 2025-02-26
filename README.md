@@ -1,3 +1,31 @@
+
+# Todo List Frontend with Next.js
+
+This project is a Todo List frontend application built with Next.js. It provides an intuitive interface for managing your tasks and lists, including support for collaborators and team members.
+
+## Features
+
+- **Add Task to List:** Easily add new tasks to an existing list.
+- **Add List:** Create new todo lists to organize your tasks.
+- **Add Collaborator to List:** Invite collaborators to share and manage your lists.
+- **Delete List:** Remove an entire list when it's no longer needed.
+- **Delete Task:** Delete individual tasks from your lists.
+- **Add Member to Task:** Assign tasks to specific team members.
+- **Progress Tracking:** Monitor the progress of your tasks as you complete them.
+
+## Tech Stack
+
+- **Framework:** [Next.js](https://nextjs.org/)
+- **Library:** React
+- *(Additional libraries and tools can be listed here as needed.)*
+
+## Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/yourusername/your-todo-list-frontend.git
+
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
@@ -34,3 +62,6 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+
+
